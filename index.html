@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O que mudou em cada modalidade? | VistoriaPro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /*
+    Layout recriado a partir do design do Canva (página de 1366 px de largura).
+    Em telas largas tudo escala proporcionalmente (unidade --u = 1px do design).
+    Em telas estreitas (<= 760px) o conteúdo passa a fluir em coluna.
+  */
+  :root {
+    --navy: #003a61;
+    --cream: #fffcf7;
+    --blue: #06a6f0;
+    --green-dark: #00874a;
+    --green-mid: #38b54a;
+    --green-light: #a0f14f;
+    --U: calc(min(100vw, 1366px) / 1366);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+
+  /* ---- Palco: coluna de 1366 design-px que escala ---- */
+  .sec { position: relative; width: 100%; overflow: hidden; }
+  .stage {
+    position: relative; width: 100%; max-width: 1366px; margin: 0 auto;
+    container-type: inline-size;
+    aspect-ratio: 1366 / var(--h);
+  }
+  .stage > *, .stage > * * { --u: calc(100cqw / 1366); }
+  .a {
+    position: absolute;
+    left: calc(var(--x) * var(--u));
+    top: calc(var(--y) * var(--u));
+    width: calc(var(--w) * var(--u));
+  }
+  .t { font-size: calc(var(--fs) * var(--u)); line-height: var(--lh, 1.4); letter-spacing: -0.06px; }
+
+  /* ---- Hero ---- */
+  .hero { background: radial-gradient(circle at 0 0, #002d4a 0%, #003b62 50%, #004673 100%); color: #fff; }
+  .hero .glow {
+    left: calc(51.7 * var(--u)); top: calc(-292.6 * var(--u));
+    width: calc(1283.4 * var(--u)); height: calc(1283.4 * var(--u));
+    border-radius: 50%;
+    background: radial-gradient(circle closest-side, rgba(0,89,255,.95) 0%, rgba(0,89,255,.6) 45%, rgba(0,89,255,0) 100%);
+    opacity: .75;
+  }
+  .tab {
+    background: #fff;
+    border-radius: 0 0 calc(90 * var(--u)) calc(90 * var(--u));
+  }
+  .tab.navy { background: var(--navy); }
+  .hero h1 { font-weight: 700; text-align: center; letter-spacing: 0; line-height: 1.21; }
+  .hero .l1 { color: #fff; }
+  .hero .l2 { color: var(--blue); font-weight: 700; line-height: 1.21; text-align: center; letter-spacing: 0; }
+  .hero .sub { text-align: center; color: #fff; font-weight: 400; }
+
+  /* ---- Grid de modalidades ---- */
+  .grid-sec { background: var(--cream); }
+  .tab > img.a { height: auto; }
+  .logo-link img { width: 100%; height: auto; }
+  .item img { width: 100%; height: auto; }
+  .lbl {
+    text-align: center; color: var(--navy); font-weight: 400;
+    text-decoration: underline; text-underline-offset: .12em;
+    text-decoration-color: rgba(0, 58, 97, .55);
+    display: block;
+  }
+  .lbl.plain { text-decoration: none; }
+
+  /* Hover/foco: ícone sobe e cresce com leve "mola", sombra aumenta, rótulo ganha cor */
+  .item { text-decoration: none; display: block; -webkit-tap-highlight-color: transparent; }
+  .item img {
+    transform-origin: 50% 60%;
+    transition: transform .45s cubic-bezier(.34, 1.56, .64, 1), filter .3s ease;
+    will-change: transform;
+  }
+  .item .lbl {
+    transition: color .25s ease, transform .45s cubic-bezier(.34, 1.56, .64, 1), text-decoration-color .25s ease;
+  }
+  .item:hover img, .item:focus-visible img {
+    transform: translateY(calc(-10 * var(--u))) scale(1.08);
+    filter: drop-shadow(0 calc(16 * var(--u)) calc(12 * var(--u)) rgba(0, 58, 97, .28));
+  }
+  .item:hover .lbl, .item:focus-visible .lbl {
+    color: var(--blue); text-decoration-color: var(--blue);
+    transform: translateY(calc(2 * var(--u)));
+  }
+  .item:active img { transform: translateY(calc(-3 * var(--u))) scale(.97); transition-duration: .12s; }
+  .item:focus-visible { outline: 3px solid var(--blue); outline-offset: calc(8 * var(--u)); border-radius: 12px; }
+
+  /* Entrada escalonada dos ícones ao abrir a página */
+  @keyframes rise { from { opacity: 0; transform: translateY(calc(26 * var(--u))) scale(.94); } to { opacity: 1; transform: none; } }
+  .item { animation: rise .6s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 45ms); }
+  @keyframes fade { from { opacity: 0; transform: translateY(calc(14 * var(--u))); } to { opacity: 1; transform: none; } }
+  .detail-sec .stage > * { animation: fade .5s ease both; }
+
+  /* ---- Detalhe ---- */
+  .detail-sec { background: var(--cream); }
+  .info { font-size: calc(30.4 * var(--u)); line-height: 1.5; color: var(--navy); }
+  .info p { margin: 0 0 calc(45.6 * var(--u)); }
+  .info p.tight { margin-bottom: 0; }
+  .info b { font-weight: 700; }
+  .info ul { margin: 0 0 calc(45.6 * var(--u)); padding-left: calc(36 * var(--u)); }
+
+  /* ---- Acordeão: "Como era feita na antiga / Como deve ser feita na nova modalidade" ---- */
+  .accstage { transition: aspect-ratio .6s cubic-bezier(.4, 0, .2, 1); }
+  .acc-item {
+    position: relative; height: calc(107.3 * var(--u));
+    transition: height .6s cubic-bezier(.4, 0, .2, 1), margin-top .6s cubic-bezier(.4, 0, .2, 1);
+  }
+  .acc-item + .acc-item { margin-top: calc(51.2 * var(--u)); }
+  .acc-item.open { height: calc(var(--ho) * var(--u)); }
+  .acc-item.antiga.open + .acc-item { margin-top: calc(38.2 * var(--u)); }
+
+  .acc-head {
+    position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between;
+    width: calc(788.5 * var(--u)); height: calc(107.3 * var(--u)); padding: 0 calc(24 * var(--u)) 0 calc(30.5 * var(--u));
+    border: 0; border-radius: calc(53.65 * var(--u)); color: #fff; text-align: left; cursor: pointer;
+    font: 700 calc(30.4 * var(--u)) / 1.2 'Montserrat', system-ui, sans-serif;
+    transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), filter .25s ease, box-shadow .3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .acc-item.antiga .acc-head { background: #f71111; }
+  .acc-item.nova .acc-head { background: linear-gradient(90deg, #00874a 0%, #38b54a 50%, #a0f14f 100%); }
+  .acc-head:hover, .acc-head:focus-visible {
+    transform: translateY(calc(-3 * var(--u))) scale(1.015); filter: brightness(1.07);
+    box-shadow: 0 calc(12 * var(--u)) calc(24 * var(--u)) rgba(0, 58, 97, .28);
+  }
+  .acc-head:active { transform: scale(.985); transition-duration: .1s; }
+  .acc-head:focus-visible { outline: 3px solid var(--blue); outline-offset: calc(4 * var(--u)); }
+  .acc-arrow {
+    flex: 0 0 auto; width: calc(55.5 * var(--u)); height: calc(55.5 * var(--u));
+    transition: transform .5s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  .acc-head:hover .acc-arrow { transform: translateY(calc(4 * var(--u))); }
+  .acc-item.open .acc-arrow, .acc-item.open .acc-head:hover .acc-arrow { transform: rotate(180deg); }
+
+  .acc-panel {
+    position: absolute; left: 0; top: 0; z-index: 1; width: calc(var(--pw) * var(--u)); height: 100%;
+    background: var(--pbg); border-radius: calc(100 * var(--u)); overflow: hidden;
+    opacity: 0; transition: opacity .2s ease .4s;
+  }
+  .acc-item.open .acc-panel { opacity: 1; transition-delay: 0s; transition-duration: .1s; }
+  .acc-body {
+    position: absolute; left: calc(var(--bl) * var(--u)); top: calc(var(--bt) * var(--u)); width: calc(726.1 * var(--u));
+    font-size: calc(30.1 * var(--u)); line-height: 1.5; color: var(--navy);
+    opacity: 0; transform: translateY(calc(-12 * var(--u))); transition: opacity .2s ease, transform .2s ease;
+  }
+  .acc-item.open .acc-body { opacity: 1; transform: none; transition: opacity .45s ease .22s, transform .5s cubic-bezier(.2, .8, .2, 1) .22s; }
+  .acc-body ul { margin: 0; padding-left: calc(51.5 * var(--u)); }
+  .acc-body li { margin: 0; }
+  .detail-name { text-align: center; color: var(--navy); font-weight: 400; }
+  .cta { background: var(--navy); border-radius: calc(101 * var(--u)); }
+  .cta .c1 { color: #fff; font-weight: 700; text-align: center; letter-spacing: 0; line-height: 1.5; }
+  .cta .c2 { color: var(--blue); font-weight: 700; text-align: center; letter-spacing: 0; line-height: 1.5; }
+  .watch { text-align: center; color: var(--navy); font-weight: 400; white-space: nowrap; }
+  .lbl { white-space: nowrap; }
+  .video { background: #000; }
+  .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .yt-facade {
+    position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; background: #000; cursor: pointer; overflow: hidden;
+  }
+  .yt-facade img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease, filter .3s ease; }
+  .yt-facade:hover img, .yt-facade:focus-visible img { transform: scale(1.03); filter: brightness(.85); }
+  .yt-facade:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
+  .yt-play {
+    position: absolute; left: 50%; top: 50%; width: calc(96 * var(--u)); height: calc(68 * var(--u)); margin: calc(-34 * var(--u)) 0 0 calc(-48 * var(--u));
+    background: #f00; border-radius: calc(20 * var(--u)); box-shadow: 0 6px 20px rgba(0, 0, 0, .4);
+    transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), background .2s ease;
+  }
+  .yt-play::after {
+    content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-35%, -50%);
+    border-left: calc(26 * var(--u)) solid #fff; border-top: calc(15 * var(--u)) solid transparent; border-bottom: calc(15 * var(--u)) solid transparent;
+  }
+  .yt-facade:hover .yt-play, .yt-facade:focus-visible .yt-play { transform: scale(1.12); background: #e00; }
+  .video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
+  .yt-fallback {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(26 * var(--u));
+    padding: 0 8%; text-align: center; color: #fff; background: radial-gradient(120% 140% at 70% 10%, #1c6fc2, #072a5c);
+  }
+  .yt-fallback p { margin: 0; max-width: 90%; font-size: calc(30 * var(--u)); line-height: 1.45; }
+  .yt-btn {
+    display: inline-block; padding: calc(16 * var(--u)) calc(38 * var(--u)); border-radius: 999px; background: #fff; color: var(--navy);
+    font-weight: 700; font-size: calc(28 * var(--u)); text-decoration: none; transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s ease;
+  }
+  .yt-btn:hover, .yt-btn:focus-visible { transform: translateY(calc(-3 * var(--u))) scale(1.04); box-shadow: 0 calc(10 * var(--u)) calc(22 * var(--u)) rgba(0, 0, 0, .35); outline: 0; }
+  .yt-note { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 14px; color: #fff; font-size: 13px; background: rgba(0, 0, 0, .65); text-align: center; }
+  .back {
+    background: var(--navy); border-radius: calc(101 * var(--u));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; text-decoration: underline;
+    font-size: calc(33 * var(--u)); text-underline-offset: .1em;
+    height: calc(94 * var(--u));
+  }
+  .back { transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), background .25s ease, box-shadow .3s ease; }
+  .back:hover, .back:focus-visible {
+    background: #004a7c; transform: translateY(calc(-4 * var(--u))) scale(1.04);
+    box-shadow: 0 calc(14 * var(--u)) calc(24 * var(--u)) rgba(0, 58, 97, .3);
+  }
+  .back:active { transform: scale(.97); transition-duration: .1s; }
+  .logo-link { display: block; transition: transform .3s ease, opacity .3s ease; }
+  .logo-link:hover { transform: scale(1.03); opacity: .9; }
+  .foot a { transition: color .2s ease; }
+  .foot .col-t a:hover { color: var(--green-light); }
+
+  /* ---- Rodapé ---- */
+  .foot-sec {
+    background: var(--navy); color: #fff;
+    border-radius: min(90px, 6.59vw) min(90px, 6.59vw) 0 0;
+  }
+  .foot h2 { font-weight: 300; text-align: center; letter-spacing: -0.032em; line-height: 1.02; font-size: calc(80.13 * var(--u)); }
+  .foot h2 span {
+    display: block; color: var(--green-dark);
+    background: linear-gradient(90deg, #00874a 0%, #38b54a 50%, #a0f14f 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .foot .col-h { font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: calc(16.68 * var(--u)); line-height: 1.5; }
+  .foot .col-t { font-size: calc(16.68 * var(--u)); line-height: 1.5; font-weight: 400; }
+  .foot .col-t a { text-decoration: underline; letter-spacing: .04em; }
+  .foot .pill { display: block; }
+
+  /* ---- Pop-up de aviso ---- */
+  .popup-overlay {
+    position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px;
+    background: rgba(2, 16, 40, .6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    animation: pop-bg .3s ease both; cursor: pointer;
+  }
+  .popup {
+    --w: min(430px, 86vw);
+    position: relative; width: var(--w); container-type: inline-size;
+    aspect-ratio: 1240 / 690; background: #fff; border-radius: calc(var(--w) * .065); overflow: hidden;
+    box-shadow: 0 calc(var(--w) * .06) calc(var(--w) * .1) calc(var(--w) * -.03) rgba(0, 0, 0, .55),
+                0 calc(var(--w) * .012) calc(var(--w) * .035) rgba(0, 0, 0, .25);
+    animation: pop-in .6s cubic-bezier(.34, 1.45, .64, 1) both;
+    display: flex; flex-direction: column; text-align: center;
+  }
+  .popup-head {
+    position: relative; overflow: hidden;
+    flex: 0 0 39.6%; border-radius: 0 0 6.5cqw 6.5cqw;
+    background: linear-gradient(135deg, #0b3a86 0%, #04204f 55%, #031a42 100%);
+    display: grid; place-items: center;
+  }
+  /* brilho que passa uma vez pelo cabeçalho */
+  .popup-head::after {
+    content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 30%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .22), transparent);
+    transform: skewX(-18deg); animation: pop-shine 1s ease .45s both; pointer-events: none;
+  }
+  /* anel que pulsa atrás do ícone */
+  .popup-ring {
+    position: absolute; left: 50%; top: 50%; width: 22cqw; height: 22cqw; margin: -11cqw 0 0 -11cqw;
+    border-radius: 50%; border: .6cqw solid rgba(255, 255, 255, .55);
+    animation: pop-ring 1.5s ease-out .3s 2 both;
+  }
+  .popup-ico { position: relative; width: 18.7%; height: auto; margin-top: -1cqw; transform-origin: 50% 70%;
+    animation: pop-icon .6s cubic-bezier(.34, 1.8, .64, 1) .18s both, pop-wiggle .7s ease-in-out .85s both; }
+  .popup-dot { animation: pop-dot .5s ease .8s both; transform-origin: 50px 72px; }
+  .popup-text {
+    flex: 1; display: grid; place-items: center; padding: 0 4%; margin: 0;
+    color: #04204f; font-weight: 700; font-size: 7.5cqw; line-height: 1.12; letter-spacing: -0.035em;
+    animation: pop-up .5s cubic-bezier(.2, .8, .2, 1) .32s both;
+  }
+  .popup-close {
+    position: absolute; top: 2.4cqw; right: 2.8cqw; width: 8.4cqw; height: 8.4cqw; border: 0; border-radius: 50%; z-index: 2;
+    background: rgba(255, 255, 255, .14); color: #fff; font: 400 5.6cqw/1 'Montserrat', sans-serif; cursor: pointer;
+    transition: background .25s ease, transform .35s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  .popup-close:hover, .popup-close:focus-visible { background: rgba(255, 255, 255, .3); transform: rotate(90deg) scale(1.1); outline: 0; }
+
+  /* saída */
+  .popup-overlay.closing { animation: pop-bg-out .22s ease both; pointer-events: none; }
+  .popup-overlay.closing .popup { animation: pop-out .22s ease-in both; }
+
+  @keyframes pop-bg { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pop-bg-out { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes pop-in { 0% { opacity: 0; transform: translateY(40px) scale(.75); } 60% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+  @keyframes pop-out { to { opacity: 0; transform: translateY(14px) scale(.9); } }
+  @keyframes pop-icon { from { opacity: 0; transform: scale(.3) rotate(-12deg); } to { opacity: 1; transform: none; } }
+  @keyframes pop-wiggle { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-8deg); } 40% { transform: rotate(7deg); } 60% { transform: rotate(-4deg); } 80% { transform: rotate(2deg); } }
+  @keyframes pop-dot { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.7); } }
+  @keyframes pop-ring { 0% { opacity: .7; transform: scale(.55); } 100% { opacity: 0; transform: scale(2.6); } }
+  @keyframes pop-shine { from { left: -40%; } to { left: 130%; } }
+  @keyframes pop-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* "Reduzir movimento": mantém entrada suave (zoom + fade), sem deslocamento, mola ou balanço */
+  @media (prefers-reduced-motion: reduce) {
+    .popup { animation: pop-in-rm .4s ease both; }
+    .popup-ico { animation: pop-icon-rm .4s ease .15s both; }
+    .popup-dot { animation: none; }
+    .popup-ring { animation: pop-ring-rm 1.2s ease-out .3s 1 both; }
+    @keyframes pop-ring-rm { 0% { opacity: .6; transform: scale(.7); } 100% { opacity: 0; transform: scale(1.8); } }
+    .popup-text { animation: pop-bg .5s ease .25s both; }
+    .popup-head::after { animation: pop-shine 1.4s ease .4s both; }
+    .popup-close:hover, .popup-close:focus-visible { transform: scale(1.1); }
+    .popup-overlay.closing .popup { animation: pop-out-rm .2s ease both; }
+    @keyframes pop-in-rm { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+    @keyframes pop-icon-rm { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
+    @keyframes pop-out-rm { to { opacity: 0; transform: scale(.94); } }
+  }
+
+  .nomobile { display: block; }
+
+  /* ---- Mobile: fluxo em coluna ---- */
+  @media (max-width: 760px) {
+    .stage { aspect-ratio: auto; container-type: normal; padding: 0 20px; }
+    .stage > *, .stage > * * { --u: 1px; }
+    .a { position: static; width: auto; }
+    .t { font-size: var(--mfs, 16px); }
+
+    .hero .stage { padding: 0 20px 36px; display: flex; flex-direction: column; align-items: center; }
+    .hero .glow { display: none; }
+    .tab { width: min(78%, 300px); height: auto; padding: 22px 28px 26px; border-radius: 0 0 28px 28px; margin: 0 auto 36px; }
+    .hero h1 { font-size: 30px; }
+    .hero .l2 { font-size: 46px; }
+    .hero .sub { font-size: 15px; margin-top: 14px; }
+
+    .grid-sec .stage { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 8px; padding: 36px 16px 40px; }
+    .item { width: 100%; max-width: 170px; margin: 0 auto; }
+    .lbl { font-size: 14px; margin-top: 2px; }
+
+    .detail-sec .stage { display: flex; flex-direction: column; align-items: center; padding: 0 20px 40px; gap: 0; }
+    .tab.navy { width: min(78%, 300px); padding: 22px 28px 26px; margin-bottom: 28px; }
+    .d-icon { width: 160px; margin: 0 auto; }
+    .detail-name { font-size: 18px !important; margin: 4px 0 24px; }
+    .info { font-size: 15px; width: 100%; }
+    .info p { margin-bottom: 14px; }
+    .info ul { margin-bottom: 14px; padding-left: 20px; }
+    .cta { width: 100%; height: auto !important; padding: 24px 18px; margin-top: 28px; text-align: center; }
+    .cta .a { position: static !important; width: auto; }
+    .cta .c1 { font-size: 18px; }
+    .cta .c2 { font-size: 24px; }
+    .watch { font-size: 14px !important; margin: 24px 0 12px; }
+    .video { position: relative; width: 100%; height: auto !important; aspect-ratio: 16 / 9; }
+    .yt-play { --u: 0.55px; }
+    .back { width: 220px; height: 50px; font-size: 16px; margin: 28px auto 0; }
+
+    .foot-sec { border-radius: 28px 28px 0 0; }
+    .foot .stage { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 24px 36px; gap: 14px; }
+    .foot .pill { width: 160px; }
+    .foot h2 { font-size: 36px; }
+    .foot .flogo { width: 160px; margin: 4px 0 18px; }
+    .foot .col-h { font-size: 12px; margin-top: 14px; }
+    .foot .col-t { font-size: 13px; }
+    .nomobile { display: none; }
+  }
+  @media (max-width: 760px) {
+    /* acordeão em coluna: o painel desce por baixo do botão (grid 0fr -> 1fr anima a altura) */
+    .accstage { transition: none; }
+    .acc { width: 100%; margin-top: 24px; }
+    .acc-item, .acc-item.open { height: auto !important; margin-top: 0 !important; border-radius: 26px; transition: background .3s ease; }
+    .acc-item + .acc-item { margin-top: 16px !important; }
+    .acc-item.open { background: var(--pbg); }
+    .acc-head { width: 100%; height: auto; min-height: 54px; padding: 12px 16px 12px 20px; border-radius: 27px; font-size: 15px; gap: 12px; }
+    .acc-arrow { width: 28px; height: 28px; }
+    .acc-panel { position: static; width: auto; height: auto; opacity: 1; background: none; border-radius: 0; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
+    .acc-item.open .acc-panel { grid-template-rows: 1fr; transition-delay: 0s; }
+    .acc-body { position: static; width: auto; min-height: 0; overflow: hidden; font-size: 14px; opacity: 1 !important; transform: none !important; transition: none !important; }
+    .acc-body ul { padding: 16px 18px 18px 40px; }
+    .tab .a { position: static; width: 100%; }
+    .tab img { width: 100%; height: auto; }
+    .tab, .tab.navy { height: auto !important; }
+    .a { max-width: 100%; }
+    .item { max-width: 170px; margin: 0 auto; width: 100%; }
+    .item .lbl { margin-top: 4px; font-size: 14px; white-space: normal; }
+    .logo-link { width: 100%; }
+    .foot .a { max-width: 100%; }
+  }
+  /* "Reduzir movimento": sem entrada animada e sem "mola"/deslocamento, mas o hover continua
+     com feedback visível (leve zoom, sombra e cor) em transição curta e suave. */
+  @media (prefers-reduced-motion: reduce) {
+    .item, .detail-sec .stage > * { animation: none; }
+    .item img, .item .lbl, .back, .logo-link { transition-duration: .2s; transition-timing-function: ease; }
+    .item:hover img, .item:focus-visible img { transform: scale(1.06); }
+    .item:hover .lbl, .item:focus-visible .lbl { transform: none; }
+    .item:active img { transform: scale(1.02); }
+    .back:hover, .back:focus-visible { transform: scale(1.02); }
+    .back:active { transform: scale(.99); }
+    .logo-link:hover { transform: none; }
+    .acc-item, .accstage { transition-duration: .35s; }
+    .acc-head { transition-timing-function: ease; }
+    .acc-head:hover, .acc-head:focus-visible { transform: scale(1.01); }
+    .acc-arrow { transition-timing-function: ease; }
+  }
+</style>
+</head>
+<body>
+
+<main id="app"></main>
+
+<script>
+  // ===== Dados =====
+  // Posições (x, y, largura) em unidades do design do Canva (1366 px de largura).
+  const VIDEO_ID = '5wohToD3Ti8'; // https://www.youtube.com/watch?v=5wohToD3Ti8 (mesmo vídeo em todas as páginas do Canva)
+  const VIDEO_LOCAL = 'assets/video.mp4'; // opcional: se existir, o vídeo toca daqui (funciona até abrindo o arquivo direto do disco)
+
+  // Página aberta direto do disco (file://): o YouTube bloqueia o player embutido. Se o servidor local do
+  // abrir-site.bat já estiver no ar, vai para ele automaticamente (mesmo endereço, mantendo a página atual).
+  if (location.protocol === 'file:') {
+    const alvo = 'http://localhost:8765/';
+    const sonda = new Image();                       // imagem do próprio site: confirma que é o servidor certo
+    sonda.onload = () => location.replace(alvo + location.hash);
+    sonda.src = alvo + 'assets/logo-white.png?ping=' + Date.now();
+  }
+  const MODALIDADES = [
+    { id: 'transferencia-fixa', nome: 'Transferência Fixa', ix: 142.85, iy: 58.04, is: 200, lx: 168.58, ly: 257.5, lw: 148.5,
+      modalidade: 'Transferência de propriedade ou de domicílio intermunicipal ou interestadual',
+      // Textos dos dois botões que expandem (no Canva ainda são "Lorem ipsum": troque aqui pelo conteúdo real).
+      acordeao: {
+        antiga: [
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        ],
+        nova: [
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        ]
+      }, valor: '$$$$' },
+    { id: 'infracao-de-transito', nome: 'Infração de Trânsito', ix: 436.83, iy: 58.04, is: 200, lx: 453.3, ly: 257.5, lw: 167.1, valor: '$$$$' },
+    { id: 'revenda', nome: 'Revenda', ix: 730.5, iy: 58.04, is: 200, lx: 793.97, ly: 257.5, lw: 73.1, valor: '$$$$' },
+    { id: 'mera', nome: 'Mera', ix: 1024.5, iy: 58.04, is: 200, lx: 1087.95, ly: 257.5, lw: 73.1, valor: '$$$$' },
+
+    { id: 'mera-sem-motor', nome: 'Mera sem Motor', ix: 142.85, iy: 342.34, is: 200, lx: 168.58, ly: 541.8, lw: 148.5, valor: '$$$$' },
+    { id: 'seguradora', nome: 'Seguradora', ix: 432.8, iy: 337, is: 208, lx: 453.3, ly: 541.8, lw: 167.1, valor: '$$$$' },
+    { id: 'financeira', nome: 'Financeira', ix: 730.5, iy: 342.34, is: 200, lx: 783.84, ly: 541.8, lw: 93.4, valor: '$$$$' },
+    { id: 'publico', nome: 'Público', ix: 1024.5, iy: 342.34, is: 200, lx: 1087.95, ly: 541.8, lw: 73.1, valor: '$$$$' },
+
+    { id: 'pesado-10ton', nome: 'Pesado (10Ton +)', ix: 142.85, iy: 628.8, is: 200, lx: 168.58, ly: 828.3, lw: 148.5, valor: '$$$$' },
+    { id: 'infracao-pesada', nome: 'Infração Pesada', ix: 431.9, iy: 630.2, is: 200, lx: 447.6, ly: 830.3, lw: 168.6, valor: '$$$$' },
+    { id: 'pesado-45-99', nome: 'Pesado (4,5 a 9,9 Ton)', ix: 742.4, iy: 622.8, is: 200, lx: 783.65, ly: 828.3, lw: 117.5, valor: '$$$$' },
+    { id: 'autorizado-detran', nome: 'Autorizado Detran', ix: 1024.5, iy: 628.8, is: 200, lx: 1043.8, ly: 830.3, lw: 161.4, valor: '$$$$' },
+
+    { id: 'treinamento', nome: 'Treinamento', ix: 293.2, iy: 913.9, is: 200, lx: 309.6, ly: 1112.2, lw: 167.1, valor: '$$$$' },
+    { id: 'preparacao-leilao', nome: 'Preparação Leilão', ix: 585.3, iy: 913.9, is: 200, lx: 626.6, ly: 1112.2, lw: 117.5, plain: true, valor: '$$$$' },
+    { id: 'cidade-sem-ecv', nome: 'Cidade sem ECV', ix: 892.3, iy: 902.6, is: 200, lx: 933.6, ly: 1116.8, lw: 117.5, plain: true,
+      modalidade: 'Procedimento descontinuado', semVideo: true, popup: true }
+  ];
+
+  const app = document.getElementById('app');
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const pos = (x, y, w) => `--x:${x};--y:${y};--w:${w}`;
+
+  /* ---------- Rodapé (idêntico em todas as páginas) ---------- */
+  function footer(off, h) {
+    const P = (x, y, w, extra = '') => `style="${pos(x, y + off, w)}${extra}"`;
+    return `
+    <footer class="sec foot-sec foot">
+      <div class="stage" style="--h:${h}">
+        <img class="a pill" ${P(566, 36, 234)} src="assets/pill-compuletra.png" alt="Compuletra">
+        <h2 class="a" ${P(381.95, 109.55, 602.1)}>Uma solução<span>Compuletra</span></h2>
+        <img class="a flogo" ${P(568.36, 296.34, 229.29)} src="assets/logo-white.png" alt="VistoriaPro">
+
+        <div class="a col-h" ${P(101.46, 402.54, 331.7, ';color:var(--green-light)')}>Endereço</div>
+        <div class="a col-t" ${P(101.46, 434.68, 319.4)}>Rua Beck, nº 56 — Menino Deus · Porto Alegre · RS · CEP 90130-030</div>
+
+        <div class="a col-h" ${P(517.15, 402.54, 331.7, ';color:var(--green-mid)')}>Telefones</div>
+        <div class="a col-t" ${P(517.15, 434.68, 331.7)}>
+          <a href="tel:+555132314848">RS Porto Alegre: (51) 3231 4848</a><br>
+          <a href="tel:+551148580938">SP São Paulo: (11) 4858 0938</a><br>
+          <a href="tel:+557128860206">BA Salvador: (71) 2886 0206</a>
+        </div>
+
+        <div class="a col-h" ${P(882.61, 402.54, 437.3, ';color:var(--green-dark)')}>Dúvidas? Entre em contato!</div>
+        <div class="a col-t" ${P(882.61, 434.68, 421.5)}>E-mail Comercial: <a href="mailto:comercial@vistoriapro.com.br" style="text-decoration:none;letter-spacing:0">comercial@vistoriapro.com.br</a><br>Segunda a Sexta: 8h às 18h30 · Sábado: 8h às 12h</div>
+      </div>
+    </footer>`;
+  }
+
+  /* ---------- Home ---------- */
+  function home() {
+    // Rótulos posicionados como no Canva (desktop); no mobile ficam sob o ícone
+    const BR = { 'transferencia-fixa': 'Transferência<br>Fixa', 'mera-sem-motor': 'Mera sem<br>Motor',
+      'pesado-10ton': 'Pesado<br>(10Ton +)', 'pesado-45-99': 'Pesado (4,5 a<br>9,9 Ton)',
+      'preparacao-leilao': 'Preparação<br>Leilão', 'cidade-sem-ecv': 'Cidade<br>Sem ECV' };
+    // Ícone + rótulo formam um único link, para o hover animar os dois juntos
+    const itemsClean = MODALIDADES.map((m, i) => `
+      <a class="a item" style="${pos(m.ix, m.iy, m.is)};--i:${i}" href="#/${m.id}" aria-label="${esc(m.nome)}">
+        <img src="assets/icons/home/${m.id}.png" alt="" width="${m.is}" height="${m.is}">
+        <span class="a lbl t ${m.plain ? 'plain' : ''}" style="${pos(m.lx + m.lw / 2 - 100 - m.ix, m.ly - m.iy, 200)};--fs:20.49">${BR[m.id] || esc(m.nome)}</span>
+      </a>`).join('');
+
+    app.innerHTML = `
+      <section class="sec hero">
+        <div class="stage" style="--h:575">
+          <div class="a glow"></div>
+          <div class="a tab" style="${pos(333.9, 0, 698.3)};height:calc(172.7 * var(--u))">
+            <img class="a" style="${pos(140.6, 47.7, 417)}" src="assets/logo-color.png" alt="VistoriaPro">
+          </div>
+          <h1 class="a t l1" style="${pos(0, 267.9, 1366)};--fs:50.74;--lh:1.21;text-align:center">O que mudou em cada</h1>
+          <div class="a t l2" style="${pos(0, 320.4, 1366)};--fs:90.07;--lh:1.21">modalidade?</div>
+          <p class="a t sub" style="${pos(0, 439.6, 1366)};--fs:26.14;--lh:1.4">Nas vistorias de São Paulo</p>
+        </div>
+      </section>
+      <section class="sec grid-sec">
+        <div class="stage" style="--h:1227.2">
+          ${itemsClean}
+        </div>
+      </section>
+      ${footer(57.8, 676.8)}`;
+    document.title = 'O que mudou em cada modalidade? | VistoriaPro';
+  }
+
+  /* ---------- Detalhe ---------- */
+  function detail(m) {
+    const bullets = m.mudou && m.mudou.length
+      ? `<ul>${m.mudou.map(i => `<li>${esc(i)}</li>`).join('')}</ul>` : '';
+    const mod = m.modalidade ? ` ${esc(m.modalidade)}` : '';
+    const valor = m.semVideo ? '' : `<p class="tight"><b>Valor:</b> ${esc(m.valor || '$$$$')}</p>`;
+    // Páginas com acordeão (Transferência Fixa) não têm "O que mudou:"; as demais seguem o modelo anterior.
+    const oQueMudou = m.acordeao ? '' : `<p class="tight"><b>O que mudou:</b></p>${bullets || '<p></p>'}`;
+    const video = m.semVideo ? '' : `
+      <p class="a t watch" style="${pos(283, 254.9, 800)};--fs:31.47">Assista nossos contéudos no Youtube</p>
+      <div class="a video" style="${pos(147.7, 312.3, 1092.8)};height:calc(614.2 * var(--u))">
+        <button type="button" class="yt-facade" data-video="${VIDEO_ID}" aria-label="Reproduzir vídeo: ${esc(m.nome)}">
+          <img src="https://i.ytimg.com/vi/${VIDEO_ID}/maxresdefault.jpg" alt="" loading="lazy"
+               onerror="if(!this.dataset.f){this.dataset.f=1;this.src='https://i.ytimg.com/vi/${VIDEO_ID}/hqdefault.jpg'}">
+          <span class="yt-play" aria-hidden="true"></span>
+          ${/^https?:$/.test(location.protocol) ? '' : '<span class="yt-note">Para assistir aqui na página, abra o site pelo arquivo <b>abrir-site.bat</b>. Clique para ver no YouTube.</span>'}
+        </button>
+      </div>`;
+    const backY = m.semVideo ? 254.9 + 100 : 993;
+    app.innerHTML = `
+      <section class="sec detail-sec">
+        <!-- Parte de cima: cabeçalho, ícone, dados e (na Transferência Fixa) o acordeão -->
+        <div class="stage accstage" style="--h:1232">
+          <div class="a tab navy" style="${pos(345, 0, 698.3)};height:calc(172.7 * var(--u))">
+            <a class="a logo-link" style="${pos(129.5, 47.7, 418)}" href="#/" aria-label="VistoriaPro - início"><img src="assets/logo-white.png" alt="VistoriaPro"></a>
+          </div>
+
+          <img class="a d-icon" style="${pos(154.5, 321.35, 250)}" src="assets/icons/detail/${m.id}.png" alt="">
+          <div class="a t detail-name" style="${pos(147.7, 572.9, 262.8)};--fs:36.25">${esc(m.nome)}</div>
+
+          <div class="a info" style="${pos(526, 282.2, 732.8)}">
+            <p><b>Tipo:</b> Segurança Veicular</p>
+            <p><b>Modalidade:</b>${mod}</p>
+            ${oQueMudou}
+            ${valor}
+          </div>
+          ${m.acordeao ? accordion(m) : ''}
+        </div>
+
+        <!-- Parte de baixo: "Como se realiza...", vídeo e botão voltar -->
+        <div class="stage" style="--h:${m.semVideo ? 520 : 1176}">
+          <div class="a cta" style="${pos(137.1, 0, 1092.8)};height:calc(202 * var(--u))">
+            <div class="a t c1" style="${pos(0, 38.3, 1092.8)};--fs:48.68;position:absolute">Como se realiza a nova vistoria na</div>
+            <div class="a t c2" style="${pos(0, 82.9, 1092.8)};--fs:69.73;position:absolute">modalidade de segurança?</div>
+          </div>
+          ${video}
+          <a class="a back" style="${pos(498.6, backY, 368.8)}" href="#/">Voltar ao Início</a>
+        </div>
+      </section>
+      ${footer(69, 639)}`;
+    document.title = `${m.nome} | VistoriaPro`;
+  }
+
+  /* ---------- Acordeão "antiga / nova modalidade" ---------- */
+  const ACC_ALTURA = { none: 1232, nova: 1232, antiga: 1391 }; // altura (design px) da parte de cima em cada estado
+  function accordion(m) {
+    const li = a => a.map(t => `<li>${esc(t)}</li>`).join('');
+    const seta = `<svg class="acc-arrow" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="49" fill="none" stroke="#fffcf7" stroke-width="1.8"/><path d="M50 22.5V77.5M29 55.5L50 77.5L71 55.5" fill="none" stroke="#fffcf7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    const item = (key, titulo, itens, ho, pw, bl, bt, bg) => `
+      <div class="acc-item ${key}" data-acc="${key}" style="--ho:${ho};--pw:${pw};--bl:${bl};--bt:${bt};--pbg:${bg}">
+        <button type="button" class="acc-head" id="acc-btn-${key}" aria-expanded="false" aria-controls="acc-${key}">
+          <span class="acc-title">${titulo}</span>${seta}
+        </button>
+        <div class="acc-panel"><div class="acc-body" id="acc-${key}" role="region" aria-labelledby="acc-btn-${key}"><ul>${li(itens)}</ul></div></div>
+      </div>`;
+    return `
+      <div class="a acc" style="${pos(533.8, 615.3, 788.5)}">
+        ${item('antiga', 'Como era feita na antiga modalidade', m.acordeao.antiga, 455.3, 788.5, 21.7, 136.5, '#ffd3d3')}
+        ${item('nova', 'Como deve ser feita na nova modalidade', m.acordeao.nova, 402.2, 780.8, 10.7, 119.4, '#d5ffdb')}
+      </div>`;
+  }
+  // Só um painel aberto por vez; a página cresce/encolhe suavemente conforme o estado do Canva (fechado / nova / antiga).
+  app.addEventListener('click', e => {
+    const head = e.target.closest('.acc-head');
+    if (!head) return;
+    const item = head.closest('.acc-item'), acc = item.parentElement;
+    const estavaAberto = item.classList.contains('open');
+    acc.querySelectorAll('.acc-item').forEach(it => {
+      it.classList.remove('open');
+      it.querySelector('.acc-head').setAttribute('aria-expanded', 'false');
+    });
+    let estado = 'none';
+    if (!estavaAberto) { item.classList.add('open'); head.setAttribute('aria-expanded', 'true'); estado = item.dataset.acc; }
+    acc.closest('.stage').style.setProperty('--h', ACC_ALTURA[estado]);
+  });
+
+  /* ---------- Vídeo ---------- */
+  // Ordem de tentativa ao clicar na capa:
+  //  1) arquivo local assets/video.mp4 (toca em qualquer situação, até com a página aberta direto do disco);
+  //  2) player do YouTube (só funciona com a página em http/https, ex.: abrir-site.bat ou hospedagem);
+  //  3) cartão de aviso com botão "Assistir no YouTube" (nunca mostra o "Erro 153" feio).
+  const ehHttp = /^https?:$/.test(location.protocol);
+
+  function temVideoLocal() {
+    return new Promise(resolve => {
+      const v = document.createElement('video');
+      const fim = ok => { v.onloadedmetadata = v.onerror = null; v.removeAttribute('src'); v.load(); resolve(ok); };
+      v.preload = 'metadata';
+      v.onloadedmetadata = () => fim(true);
+      v.onerror = () => fim(false);
+      setTimeout(() => fim(false), 3000);
+      v.src = VIDEO_LOCAL;
+    });
+  }
+
+  let ytApi = null;
+  function carregarYT() {
+    if (ytApi) return ytApi;
+    ytApi = new Promise((resolve, reject) => {
+      if (window.YT && window.YT.Player) return resolve();
+      const s = document.createElement('script');
+      s.src = 'https://www.youtube.com/iframe_api';
+      s.onerror = reject;
+      window.onYouTubeIframeAPIReady = resolve;
+      document.head.appendChild(s);
+      setTimeout(reject, 10000);
+    });
+    ytApi.catch(() => { ytApi = null; });
+    return ytApi;
+  }
+
+  function avisoVideo(box, id, motivo) {
+    const dica = motivo === 'arquivo'
+      ? 'O YouTube não permite tocar o vídeo com a página aberta direto do computador. Abra o site pelo arquivo <b>abrir-site.bat</b> para assistir aqui, ou assista no YouTube.'
+      : 'Não foi possível carregar o vídeo aqui. Você pode assistir direto no YouTube.';
+    box.innerHTML = `
+      <div class="yt-fallback" role="alert">
+        <p>${dica}</p>
+        <a class="yt-btn" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">Assistir no YouTube</a>
+      </div>`;
+  }
+
+  app.addEventListener('click', async e => {
+    const btn = e.target.closest('.yt-facade');
+    if (!btn || btn.dataset.busy) return;
+    btn.dataset.busy = '1';
+    const box = btn.closest('.video'), id = btn.dataset.video;
+
+    // 1) MP4 local
+    if (await temVideoLocal()) {
+      const v = document.createElement('video');
+      v.src = VIDEO_LOCAL; v.controls = true; v.autoplay = true; v.playsInline = true;
+      v.poster = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+      btn.replaceWith(v);
+      v.play().catch(() => {});
+      return;
+    }
+    // 2) YouTube (precisa de http/https)
+    if (!ehHttp) return avisoVideo(box, id, 'arquivo');
+    try {
+      await carregarYT();
+      // Tenta tocar na hora (autoplay). Se o YouTube recusar (ex.: verificação anti-robô), recria o player sem
+      // autoplay, mostrando o botão de play dele; só se isso também falhar aparece o cartão de aviso.
+      const criar = autoplay => {
+        const alvo = document.createElement('div');
+        box.replaceChildren(alvo);
+        new YT.Player(alvo, {
+          width: '100%', height: '100%', videoId: id,
+          playerVars: { autoplay: autoplay ? 1 : 0, rel: 0, modestbranding: 1, playsinline: 1, origin: location.origin },
+          events: {
+            onReady: ev => { if (autoplay) ev.target.playVideo(); },
+            onError: ev => {
+              console.warn('YouTube erro', ev.data, autoplay ? '(vai tentar sem autoplay)' : '');
+              window.__ytErro = ev.data;
+              autoplay ? criar(false) : avisoVideo(box, id, 'erro');
+            }
+          }
+        });
+      };
+      criar(true);
+    } catch (err) {
+      console.warn('YouTube API indisponível', err);
+      avisoVideo(box, id, 'erro');          // API bloqueada/sem internet
+    }
+  });
+
+  /* ---------- Pop-up (Cidade sem ECV) ---------- */
+  let popupEl = null, popupReturnFocus = null;
+  function closePopup(navigate = true, instant = false) {
+    if (!popupEl) return;
+    const el = popupEl; popupEl = null;
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', popupKey);
+    if (popupReturnFocus && popupReturnFocus.focus) popupReturnFocus.focus();
+    if (navigate && location.hash.replace(/^#\/?/, '') !== '') history.pushState(null, '', location.pathname + location.search);
+    if (instant) { el.remove(); return; }
+    el.classList.add('closing');                 // animação de saída antes de remover
+    setTimeout(() => el.remove(), 260);
+  }
+  function popupKey(e) {
+    if (e.key === 'Escape') closePopup();
+    if (e.key === 'Tab') { e.preventDefault(); popupEl.querySelector('.popup-close').focus(); } // foco preso no pop-up
+  }
+  function showPopup() {
+    if (popupEl) return;
+    popupReturnFocus = document.activeElement;
+    popupEl = document.createElement('div');
+    popupEl.className = 'popup-overlay';
+    popupEl.innerHTML = `
+      <div class="popup" role="alertdialog" aria-modal="true" aria-labelledby="popup-title">
+        <div class="popup-head">
+          <span class="popup-ring" aria-hidden="true"></span>
+          <svg viewBox="0 0 100 100" aria-hidden="true" class="popup-ico">
+            <path d="M50 12 L90 82 Q93 88 86 88 L14 88 Q7 88 10 82 Z" fill="none" stroke="#fff" stroke-width="8" stroke-linejoin="round"/>
+            <rect x="46.5" y="34" width="7" height="26" rx="3.5" fill="#fff"/>
+            <circle class="popup-dot" cx="50" cy="72" r="4.5" fill="#fff"/>
+          </svg>
+        </div>
+        <p id="popup-title" class="popup-text">Está modalidade<br>não está mais em vigor</p>
+        <button type="button" class="popup-close" aria-label="Fechar aviso">×</button>
+      </div>`;
+    popupEl.addEventListener('click', e => { if (e.target === popupEl || e.target.closest('.popup')) closePopup(); });
+    document.body.appendChild(popupEl);
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', popupKey);
+    popupEl.querySelector('.popup-close').focus();
+  }
+
+  function route() {
+    closePopup(false, true);
+    const id = location.hash.replace(/^#\/?/, '');
+    const m = MODALIDADES.find(x => x.id === id);
+    if (m && m.popup) {            // abre o aviso sobre a home, sem trocar de página
+      if (!document.querySelector('.hero')) { home(); window.scrollTo(0, 0); }
+      showPopup();
+      return;
+    }
+    m ? detail(m) : home();
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+</script>
+</body>
+</html>
