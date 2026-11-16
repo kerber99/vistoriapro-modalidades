@@ -329,31 +329,32 @@
 
   .nomobile { display: block; }
 
-  /* ---- Mobile: fluxo em coluna ---- */
+  /* ---- Celular (<= 760px) ----
+     HOME: o mesmo visual do design, em escala (como a prévia de celular do Canva).
+     Páginas de modalidade e rodapé: mesmo visual, mas reorganizados em coluna para o texto continuar legível. */
   @media (max-width: 760px) {
-    .stage { aspect-ratio: auto; container-type: normal; padding: 0 20px; }
-    .stage > *, .stage > * * { --u: 1px; }
-    .a { position: static; width: auto; }
-    .t { font-size: var(--mfs, 16px); }
+    /* Home em escala: só reforço o tamanho dos textos pequenos para dar para ler */
+    .hero .sub { font-size: max(11px, calc(26.14 * var(--u))); }
+    .grid-sec .lbl {
+      left: calc((var(--x) - 35) * var(--u)); width: calc(270 * var(--u));
+      white-space: normal; font-size: clamp(9.5px, 2.9vw, 12px); line-height: 1.2;
+    }
 
-    .hero .stage { padding: 0 20px 36px; display: flex; flex-direction: column; align-items: center; }
-    .hero .glow { display: none; }
-    .tab { width: min(78%, 300px); height: auto; padding: 22px 28px 26px; border-radius: 0 0 28px 28px; margin: 0 auto 36px; }
-    .hero h1 { font-size: 30px; }
-    .hero .l2 { font-size: 46px; }
-    .hero .sub { font-size: 15px; margin-top: 14px; }
-
-    .grid-sec .stage { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 8px; padding: 36px 16px 40px; }
-    .item { width: 100%; max-width: 170px; margin: 0 auto; }
-    .lbl { font-size: 14px; margin-top: 2px; }
+    /* Detalhe e rodapé em coluna */
+    .detail-sec .stage, .foot .stage { aspect-ratio: auto; container-type: normal; padding: 0 20px; }
+    .detail-sec .stage > *, .detail-sec .stage > * *, .foot .stage > *, .foot .stage > * * { --u: 1px; }
+    :where(.detail-sec, .foot) .a { position: static; width: auto; max-width: 100%; }
+    :where(.detail-sec, .foot) .t { font-size: var(--mfs, 16px); }
+    .grid-sec { padding-bottom: 22px; }
 
     .detail-sec .stage { display: flex; flex-direction: column; align-items: center; padding: 0 20px 40px; gap: 0; }
-    .tab.navy { width: min(78%, 300px); padding: 22px 28px 26px; margin-bottom: 28px; }
+    .detail-sec .tab { width: min(78%, 300px); height: auto !important; padding: 22px 28px 26px; border-radius: 0 0 28px 28px; margin: 0 auto 28px; }
+    .detail-sec .tab .a { position: static; width: 100%; }
+    .detail-sec .tab img { width: 100%; height: auto; }
+    .logo-link { width: 100%; }
     .d-icon { width: 160px; margin: 0 auto; }
     .detail-name { font-size: 18px !important; margin: 4px 0 24px; }
-    .info { font-size: 15px; width: 100%; }
-    .info p { margin-bottom: 14px; }
-    .info ul { margin-bottom: 14px; padding-left: 20px; }
+    .ptxt.a { width: 100%; font-size: 15px; }
     .cta { width: 100%; height: auto !important; padding: 24px 18px; margin-top: 28px; text-align: center; }
     .cta .a { position: static !important; width: auto; }
     .cta .c1 { font-size: 18px; }
@@ -363,16 +364,6 @@
     .yt-play { --u: 0.55px; }
     .back { width: 220px; height: 50px; font-size: 16px; margin: 28px auto 0; }
 
-    .foot-sec { border-radius: 28px 28px 0 0; }
-    .foot .stage { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 24px 36px; gap: 14px; }
-    .foot .selo { width: 160px; }
-    .foot h2 { font-size: 36px; }
-    .foot .flogo { width: 160px; margin: 4px 0 18px; }
-    .foot .col-h { font-size: 12px; margin-top: 14px; }
-    .foot .col-t { font-size: 13px; }
-    .nomobile { display: none; }
-  }
-  @media (max-width: 760px) {
     /* painéis recolhíveis em coluna: botão no topo, o painel desce por baixo dele */
     .flow > *, .flow > * * { --u: 1px; }
     .hdr { height: auto !important; }
@@ -391,14 +382,15 @@
     .ptxt { font-size: 15px; }
     .ptxt p { margin-bottom: 14px; }
     .ptxt.j { text-align: left; hyphens: auto; }
-    .tab .a { position: static; width: 100%; }
-    .tab img { width: 100%; height: auto; }
-    .tab, .tab.navy { height: auto !important; }
-    .a { max-width: 100%; }
-    .item { max-width: 170px; margin: 0 auto; width: 100%; }
-    .item .lbl { margin-top: 4px; font-size: 14px; white-space: normal; }
-    .logo-link { width: 100%; }
-    .foot .a { max-width: 100%; }
+
+    /* rodapé */
+    .foot-sec { border-radius: 28px 28px 0 0; }
+    .foot .stage { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 24px 36px; gap: 14px; }
+    .foot .selo { width: 160px; }
+    .foot h2 { font-size: 36px; }
+    .foot .flogo { width: 160px; margin: 4px 0 18px; }
+    .foot .col-h { font-size: 12px; margin-top: 14px; }
+    .foot .col-t { font-size: 13px; }
   }
   /* "Reduzir movimento": sem entrada animada e sem "mola"/deslocamento, mas o hover continua
      com feedback visível (leve zoom, sombra e cor) em transição curta e suave. */
