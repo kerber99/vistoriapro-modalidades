@@ -116,32 +116,58 @@
   .info b { font-weight: 700; }
   .info ul { margin: 0 0 calc(45.6 * var(--u)); padding-left: calc(36 * var(--u)); }
 
-  /* ---- Painéis "Modalidade Antiga" (rosa) e "Nova modalidade" (verde) ---- */
+  /* ---- Painéis recolhíveis: "Modalidade Antiga" (rosa) e "Nova modalidade" (verde) ---- */
   .flow { position: relative; width: 100%; max-width: 1366px; margin: 0 auto; container-type: inline-size; }
   .flow > *, .flow > * * { --u: calc(100cqw / 1366); }
   .hdr { position: relative; height: calc(172.7 * var(--u)); }
-  .panels { padding-top: calc(168 * var(--u)); padding-bottom: calc(84 * var(--u)); }
-  .panel {
-    position: relative; width: calc(1092.8 * var(--u)); min-height: calc(390 * var(--u)); margin: 0 auto;
-    padding: calc(88.5 * var(--u)) calc(30.3 * var(--u)) calc(60 * var(--u)) 0; border-radius: calc(100 * var(--u));
-    display: grid; grid-template-columns: calc(338 * var(--u)) 1fr; align-items: start;
-    animation: rise .6s cubic-bezier(.2, .8, .2, 1) both;
-  }
-  .panel + .panel { margin-top: calc(103.4 * var(--u)); animation-delay: .15s; }
-  .panel.antiga { background: #ffd3d3; }
-  .panel.nova { background: #d5ffdb; }
+  .panels { padding-top: calc(114.4 * var(--u)); padding-bottom: calc(120 * var(--u)); }
+  .panel { width: calc(1092.8 * var(--u)); margin: 0 auto; animation: rise .6s cubic-bezier(.2, .8, .2, 1) both; }
+  .panel + .panel { margin-top: calc(50 * var(--u)); animation-delay: .15s; }
 
+  /* botão colorido (clique para expandir / recolher) */
   .pill {
-    position: absolute; top: calc(-53.65 * var(--u)); left: calc(152.6 * var(--u)); width: calc(788.5 * var(--u)); height: calc(107.3 * var(--u));
-    border-radius: calc(53.65 * var(--u)); display: flex; align-items: center; justify-content: center; color: #fff;
+    position: relative; z-index: 2; display: flex; align-items: center; justify-content: center;
+    width: calc(788.5 * var(--u)); height: calc(107.3 * var(--u)); margin: 0 auto; padding: 0;
+    border: 0; border-radius: calc(53.65 * var(--u)); color: #fff; cursor: pointer; font-family: inherit;
     box-shadow: 0 calc(10 * var(--u)) calc(22 * var(--u)) rgba(0, 58, 97, .18);
+    transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), filter .25s ease, box-shadow .3s ease;
+    -webkit-tap-highlight-color: transparent;
   }
   .panel.antiga .pill { background: #f71111; }
   .panel.nova .pill { background: linear-gradient(90deg, #00874a 0%, #38b54a 50%, #a0f14f 100%); }
-  .pill h2 { margin: 0; font: 700 calc(37.1 * var(--u)) / 1.2 'Montserrat', system-ui, sans-serif; letter-spacing: 0; }
-  .pill .arrow { position: absolute; right: calc(23.9 * var(--u)); top: calc(26 * var(--u)); width: calc(55.5 * var(--u)); height: calc(55.5 * var(--u)); }
-  .panel:hover .pill .arrow { animation: nudge .9s ease-in-out infinite; }
-  @keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(5 * var(--u))); } }
+  .pill:hover, .pill:focus-visible {
+    transform: translateY(calc(-3 * var(--u))) scale(1.015); filter: brightness(1.07);
+    box-shadow: 0 calc(12 * var(--u)) calc(24 * var(--u)) rgba(0, 58, 97, .28);
+  }
+  .pill:active { transform: scale(.985); transition-duration: .1s; }
+  .pill:focus-visible { outline: 3px solid var(--blue); outline-offset: calc(4 * var(--u)); }
+  .pill .ttl { font: 700 calc(37.1 * var(--u)) / 1.2 'Montserrat', system-ui, sans-serif; letter-spacing: 0; }
+  .pill .arrow {
+    position: absolute; right: calc(23.9 * var(--u)); top: calc(26 * var(--u)); width: calc(55.5 * var(--u)); height: calc(55.5 * var(--u));
+    transition: transform .55s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  .panel:not(.open) .pill:hover .arrow { transform: translateY(calc(5 * var(--u))); }
+  .panel.open .pill .arrow { transform: rotate(180deg); }
+
+  /* painel colorido que expande por baixo do botão (a altura anima de 0 até o tamanho do texto) */
+  .pbox {
+    display: grid; grid-template-rows: 0fr; margin-top: 0; border-radius: calc(100 * var(--u));
+    transition: grid-template-rows .6s cubic-bezier(.4, 0, .2, 1), margin-top .6s cubic-bezier(.4, 0, .2, 1);
+  }
+  .panel.antiga .pbox { background: #ffd3d3; }
+  .panel.nova .pbox { background: #d5ffdb; }
+  .panel.open .pbox { grid-template-rows: 1fr; margin-top: calc(-53.65 * var(--u)); }
+  .pbox-in { min-height: 0; overflow: hidden; border-radius: inherit; }
+  .pcontent {
+    display: grid; grid-template-columns: calc(338 * var(--u)) 1fr; align-items: start;
+    padding: calc(88.5 * var(--u)) calc(30.3 * var(--u)) calc(60 * var(--u)) 0;
+    opacity: 0; transform: translateY(calc(-14 * var(--u))); visibility: hidden;
+    transition: opacity .2s ease, transform .2s ease, visibility 0s .6s;
+  }
+  .panel.open .pcontent {
+    opacity: 1; transform: none; visibility: visible;
+    transition: opacity .5s ease .22s, transform .55s cubic-bezier(.2, .8, .2, 1) .22s, visibility 0s;
+  }
 
   .pic img { display: block; width: calc(240 * var(--u)); height: auto; margin-left: calc(63.1 * var(--u)); }
   .pic .nm { width: calc(300 * var(--u)); margin-left: calc(33.1 * var(--u)); text-align: center; color: var(--navy); font-size: calc(34.7 * var(--u)); line-height: 1.4; letter-spacing: -0.06px; }
@@ -333,7 +359,7 @@
     .cta .c1 { font-size: 18px; }
     .cta .c2 { font-size: 24px; }
     .watch { font-size: 14px !important; margin: 24px 0 12px; }
-    .video { position: relative; width: 100%; height: auto !important; aspect-ratio: 16 / 9; }
+    .video { position: relative; left: 0; top: 0; width: 100%; height: auto !important; aspect-ratio: 16 / 9; }
     .yt-play { --u: 0.55px; }
     .back { width: 220px; height: 50px; font-size: 16px; margin: 28px auto 0; }
 
@@ -347,15 +373,18 @@
     .nomobile { display: none; }
   }
   @media (max-width: 760px) {
-    /* painéis em coluna: botão colorido na borda de cima, ícone e texto empilhados */
+    /* painéis recolhíveis em coluna: botão no topo, o painel desce por baixo dele */
     .flow > *, .flow > * * { --u: 1px; }
     .hdr { height: auto !important; }
-    .panels { padding: 78px 14px 40px; }
-    .panel { width: auto; min-height: 0; padding: 50px 20px 28px; display: block; border-radius: 30px; }
-    .panel + .panel { margin-top: 70px; }
-    .pill { left: 5%; width: 90%; top: -28px; height: 56px; border-radius: 28px; }
-    .pill h2 { font-size: 17px; }
-    .pill .arrow { width: 28px; height: 28px; right: 14px; top: 14px; }
+    .panels { padding: 40px 14px 56px; }
+    .panel { width: auto; }
+    .panel + .panel { margin-top: 18px; }
+    .pill { width: 100%; height: auto; min-height: 56px; padding: 12px 56px; border-radius: 28px; }
+    .pill .ttl { font-size: 17px; }
+    .pill .arrow { width: 28px; height: 28px; right: 14px; top: 50%; margin-top: -14px; }
+    .pbox { border-radius: 30px; }
+    .panel.open .pbox { margin-top: -28px; }
+    .pcontent { display: block; padding: 50px 20px 28px; }
     .pic { text-align: center; margin-bottom: 16px; }
     .pic img { width: 150px; margin: 0 auto; }
     .pic .nm { width: auto; margin: 0; font-size: 17px; }
@@ -383,7 +412,10 @@
     .back:active { transform: scale(.99); }
     .logo-link:hover { transform: none; }
     .panel { animation: fade .5s ease both; }
-    .panel:hover .pill .arrow { animation-duration: 1.4s; }
+    .pill, .pill .arrow { transition-timing-function: ease; }
+    .pill:hover, .pill:focus-visible { transform: scale(1.01); }
+    .pbox { transition-duration: .4s; }
+    .pcontent, .panel.open .pcontent { transform: none; }
   }
 </style>
 </head>
@@ -507,11 +539,20 @@
       <div class="a tab navy" style="${pos(345, 0, 698.3)};height:calc(172.7 * var(--u))">
         <a class="a logo-link" style="${pos(129.5, 47.7, 418)}" href="#/" aria-label="VistoriaPro - início"><img src="assets/logo-white.png" alt="VistoriaPro"></a>
       </div>`;
+    // Os dois painéis começam recolhidos; clicar no botão colorido expande/recolhe (cada um independente).
+    // Para já abrir expandidos, troque para true.
+    const ABRIR_EXPANDIDOS = false;
     const painel = (cls, titulo, texto, al) => `
-      <section class="panel ${cls}" aria-label="${titulo}">
-        <div class="pill"><h2>${titulo}</h2>${SETA}</div>
-        <div class="pic"><img src="assets/icons/detail/${m.id}.png" alt=""><div class="nm">${esc(m.nome)}</div></div>
-        <div class="ptxt ${al === 's' ? 's' : 'j'}">${md(texto)}</div>
+      <section class="panel ${cls}${ABRIR_EXPANDIDOS ? ' open' : ''}">
+        <button type="button" class="pill" id="pill-${cls}" aria-expanded="${ABRIR_EXPANDIDOS}" aria-controls="corpo-${cls}">
+          <span class="ttl">${titulo}</span>${SETA}
+        </button>
+        <div class="pbox"><div class="pbox-in">
+          <div class="pcontent" id="corpo-${cls}" role="region" aria-labelledby="pill-${cls}">
+            <div class="pic"><img src="assets/icons/detail/${m.id}.png" alt=""><div class="nm">${esc(m.nome)}</div></div>
+            <div class="ptxt ${al === 's' ? 's' : 'j'}">${md(texto)}</div>
+          </div>
+        </div></div>
       </section>`;
 
     // Parte de cima: com painéis (antiga / nova) ou, se o Canva só tem um texto (ex.: Treinamento), ícone + texto.
@@ -558,6 +599,15 @@
     document.title = `${m.nome} | VistoriaPro`;
   }
 
+
+  /* ---------- Painéis recolhíveis ---------- */
+  app.addEventListener('click', e => {
+    const botao = e.target.closest('.pill');
+    if (!botao) return;
+    const painel = botao.closest('.panel');
+    const aberto = painel.classList.toggle('open');
+    botao.setAttribute('aria-expanded', String(aberto));
+  });
 
   /* ---------- Vídeo ---------- */
   // Ordem de tentativa ao clicar na capa:
