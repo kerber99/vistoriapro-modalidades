@@ -82,6 +82,7 @@
 
   /* Hover/foco: ícone sobe e cresce com leve "mola", sombra aumenta, rótulo ganha cor */
   .item { text-decoration: none; display: block; -webkit-tap-highlight-color: transparent; }
+  .item.static { cursor: default; }
   .item img {
     transform-origin: 50% 60%;
     transition: transform .45s cubic-bezier(.34, 1.56, .64, 1), filter .3s ease;
@@ -115,53 +116,41 @@
   .info b { font-weight: 700; }
   .info ul { margin: 0 0 calc(45.6 * var(--u)); padding-left: calc(36 * var(--u)); }
 
-  /* ---- Acordeão: "Como era feita na antiga / Como deve ser feita na nova modalidade" ---- */
-  .accstage { transition: aspect-ratio .6s cubic-bezier(.4, 0, .2, 1); }
-  .acc-item {
-    position: relative; height: calc(107.3 * var(--u));
-    transition: height .6s cubic-bezier(.4, 0, .2, 1), margin-top .6s cubic-bezier(.4, 0, .2, 1);
+  /* ---- Painéis "Modalidade Antiga" (rosa) e "Nova modalidade" (verde) ---- */
+  .flow { position: relative; width: 100%; max-width: 1366px; margin: 0 auto; container-type: inline-size; }
+  .flow > *, .flow > * * { --u: calc(100cqw / 1366); }
+  .hdr { position: relative; height: calc(172.7 * var(--u)); }
+  .panels { padding-top: calc(168 * var(--u)); padding-bottom: calc(84 * var(--u)); }
+  .panel {
+    position: relative; width: calc(1092.8 * var(--u)); min-height: calc(390 * var(--u)); margin: 0 auto;
+    padding: calc(88.5 * var(--u)) calc(30.3 * var(--u)) calc(60 * var(--u)) 0; border-radius: calc(100 * var(--u));
+    display: grid; grid-template-columns: calc(338 * var(--u)) 1fr; align-items: start;
+    animation: rise .6s cubic-bezier(.2, .8, .2, 1) both;
   }
-  .acc-item + .acc-item { margin-top: calc(51.2 * var(--u)); }
-  .acc-item.open { height: calc(var(--ho) * var(--u)); }
-  .acc-item.antiga.open + .acc-item { margin-top: calc(38.2 * var(--u)); }
+  .panel + .panel { margin-top: calc(103.4 * var(--u)); animation-delay: .15s; }
+  .panel.antiga { background: #ffd3d3; }
+  .panel.nova { background: #d5ffdb; }
 
-  .acc-head {
-    position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between;
-    width: calc(788.5 * var(--u)); height: calc(107.3 * var(--u)); padding: 0 calc(24 * var(--u)) 0 calc(30.5 * var(--u));
-    border: 0; border-radius: calc(53.65 * var(--u)); color: #fff; text-align: left; cursor: pointer;
-    font: 700 calc(30.4 * var(--u)) / 1.2 'Montserrat', system-ui, sans-serif;
-    transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), filter .25s ease, box-shadow .3s ease;
-    -webkit-tap-highlight-color: transparent;
+  .pill {
+    position: absolute; top: calc(-53.65 * var(--u)); left: calc(152.6 * var(--u)); width: calc(788.5 * var(--u)); height: calc(107.3 * var(--u));
+    border-radius: calc(53.65 * var(--u)); display: flex; align-items: center; justify-content: center; color: #fff;
+    box-shadow: 0 calc(10 * var(--u)) calc(22 * var(--u)) rgba(0, 58, 97, .18);
   }
-  .acc-item.antiga .acc-head { background: #f71111; }
-  .acc-item.nova .acc-head { background: linear-gradient(90deg, #00874a 0%, #38b54a 50%, #a0f14f 100%); }
-  .acc-head:hover, .acc-head:focus-visible {
-    transform: translateY(calc(-3 * var(--u))) scale(1.015); filter: brightness(1.07);
-    box-shadow: 0 calc(12 * var(--u)) calc(24 * var(--u)) rgba(0, 58, 97, .28);
-  }
-  .acc-head:active { transform: scale(.985); transition-duration: .1s; }
-  .acc-head:focus-visible { outline: 3px solid var(--blue); outline-offset: calc(4 * var(--u)); }
-  .acc-arrow {
-    flex: 0 0 auto; width: calc(55.5 * var(--u)); height: calc(55.5 * var(--u));
-    transition: transform .5s cubic-bezier(.34, 1.56, .64, 1);
-  }
-  .acc-head:hover .acc-arrow { transform: translateY(calc(4 * var(--u))); }
-  .acc-item.open .acc-arrow, .acc-item.open .acc-head:hover .acc-arrow { transform: rotate(180deg); }
+  .panel.antiga .pill { background: #f71111; }
+  .panel.nova .pill { background: linear-gradient(90deg, #00874a 0%, #38b54a 50%, #a0f14f 100%); }
+  .pill h2 { margin: 0; font: 700 calc(37.1 * var(--u)) / 1.2 'Montserrat', system-ui, sans-serif; letter-spacing: 0; }
+  .pill .arrow { position: absolute; right: calc(23.9 * var(--u)); top: calc(26 * var(--u)); width: calc(55.5 * var(--u)); height: calc(55.5 * var(--u)); }
+  .panel:hover .pill .arrow { animation: nudge .9s ease-in-out infinite; }
+  @keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(5 * var(--u))); } }
 
-  .acc-panel {
-    position: absolute; left: 0; top: 0; z-index: 1; width: calc(var(--pw) * var(--u)); height: 100%;
-    background: var(--pbg); border-radius: calc(100 * var(--u)); overflow: hidden;
-    opacity: 0; transition: opacity .2s ease .4s;
-  }
-  .acc-item.open .acc-panel { opacity: 1; transition-delay: 0s; transition-duration: .1s; }
-  .acc-body {
-    position: absolute; left: calc(var(--bl) * var(--u)); top: calc(var(--bt) * var(--u)); width: calc(726.1 * var(--u));
-    font-size: calc(30.1 * var(--u)); line-height: 1.5; color: var(--navy);
-    opacity: 0; transform: translateY(calc(-12 * var(--u))); transition: opacity .2s ease, transform .2s ease;
-  }
-  .acc-item.open .acc-body { opacity: 1; transform: none; transition: opacity .45s ease .22s, transform .5s cubic-bezier(.2, .8, .2, 1) .22s; }
-  .acc-body ul { margin: 0; padding-left: calc(51.5 * var(--u)); }
-  .acc-body li { margin: 0; }
+  .pic img { display: block; width: calc(240 * var(--u)); height: auto; margin-left: calc(63.1 * var(--u)); }
+  .pic .nm { width: calc(300 * var(--u)); margin-left: calc(33.1 * var(--u)); text-align: center; color: var(--navy); font-size: calc(34.7 * var(--u)); line-height: 1.4; letter-spacing: -0.06px; }
+  .ptxt { font-size: calc(29.1 * var(--u)); line-height: 1.5; color: var(--navy); }
+  .ptxt p { margin: 0 0 calc(43.65 * var(--u)); }
+  .ptxt p:last-child { margin-bottom: 0; }
+  .ptxt.j { text-align: justify; }
+  .ptxt b { font-weight: 700; }
+  .stage > .ptxt.a { margin: 0; }
   .detail-name { text-align: center; color: var(--navy); font-weight: 400; }
   .cta { background: var(--navy); border-radius: calc(101 * var(--u)); }
   .cta .c1 { color: #fff; font-weight: 700; text-align: center; letter-spacing: 0; line-height: 1.5; }
@@ -231,7 +220,7 @@
   .foot .col-h { font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: calc(16.68 * var(--u)); line-height: 1.5; }
   .foot .col-t { font-size: calc(16.68 * var(--u)); line-height: 1.5; font-weight: 400; }
   .foot .col-t a { text-decoration: underline; letter-spacing: .04em; }
-  .foot .pill { display: block; }
+  .foot .selo { display: block; }
 
   /* ---- Pop-up de aviso ---- */
   .popup-overlay {
@@ -350,7 +339,7 @@
 
     .foot-sec { border-radius: 28px 28px 0 0; }
     .foot .stage { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 24px 36px; gap: 14px; }
-    .foot .pill { width: 160px; }
+    .foot .selo { width: 160px; }
     .foot h2 { font-size: 36px; }
     .foot .flogo { width: 160px; margin: 4px 0 18px; }
     .foot .col-h { font-size: 12px; margin-top: 14px; }
@@ -358,18 +347,21 @@
     .nomobile { display: none; }
   }
   @media (max-width: 760px) {
-    /* acordeão em coluna: o painel desce por baixo do botão (grid 0fr -> 1fr anima a altura) */
-    .accstage { transition: none; }
-    .acc { width: 100%; margin-top: 24px; }
-    .acc-item, .acc-item.open { height: auto !important; margin-top: 0 !important; border-radius: 26px; transition: background .3s ease; }
-    .acc-item + .acc-item { margin-top: 16px !important; }
-    .acc-item.open { background: var(--pbg); }
-    .acc-head { width: 100%; height: auto; min-height: 54px; padding: 12px 16px 12px 20px; border-radius: 27px; font-size: 15px; gap: 12px; }
-    .acc-arrow { width: 28px; height: 28px; }
-    .acc-panel { position: static; width: auto; height: auto; opacity: 1; background: none; border-radius: 0; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
-    .acc-item.open .acc-panel { grid-template-rows: 1fr; transition-delay: 0s; }
-    .acc-body { position: static; width: auto; min-height: 0; overflow: hidden; font-size: 14px; opacity: 1 !important; transform: none !important; transition: none !important; }
-    .acc-body ul { padding: 16px 18px 18px 40px; }
+    /* painéis em coluna: botão colorido na borda de cima, ícone e texto empilhados */
+    .flow > *, .flow > * * { --u: 1px; }
+    .hdr { height: auto !important; }
+    .panels { padding: 78px 14px 40px; }
+    .panel { width: auto; min-height: 0; padding: 50px 20px 28px; display: block; border-radius: 30px; }
+    .panel + .panel { margin-top: 70px; }
+    .pill { left: 5%; width: 90%; top: -28px; height: 56px; border-radius: 28px; }
+    .pill h2 { font-size: 17px; }
+    .pill .arrow { width: 28px; height: 28px; right: 14px; top: 14px; }
+    .pic { text-align: center; margin-bottom: 16px; }
+    .pic img { width: 150px; margin: 0 auto; }
+    .pic .nm { width: auto; margin: 0; font-size: 17px; }
+    .ptxt { font-size: 15px; }
+    .ptxt p { margin-bottom: 14px; }
+    .ptxt.j { text-align: left; hyphens: auto; }
     .tab .a { position: static; width: 100%; }
     .tab img { width: 100%; height: auto; }
     .tab, .tab.navy { height: auto !important; }
@@ -390,10 +382,8 @@
     .back:hover, .back:focus-visible { transform: scale(1.02); }
     .back:active { transform: scale(.99); }
     .logo-link:hover { transform: none; }
-    .acc-item, .accstage { transition-duration: .35s; }
-    .acc-head { transition-timing-function: ease; }
-    .acc-head:hover, .acc-head:focus-visible { transform: scale(1.01); }
-    .acc-arrow { transition-timing-function: ease; }
+    .panel { animation: fade .5s ease both; }
+    .panel:hover .pill .arrow { animation-duration: 1.4s; }
   }
 </style>
 </head>
@@ -401,6 +391,7 @@
 
 <main id="app"></main>
 
+<script src="conteudo.js"></script>
 <script>
   // ===== Dados =====
   // Posições (x, y, largura) em unidades do design do Canva (1366 px de largura).
@@ -415,38 +406,27 @@
     sonda.onload = () => location.replace(alvo + location.hash);
     sonda.src = alvo + 'assets/logo-white.png?ping=' + Date.now();
   }
+  // ix/iy/is = caixa do ícone; lx/ly/lw = posição do rótulo (unidades do Canva, página de 1366 px). Textos: conteudo.js
   const MODALIDADES = [
-    { id: 'transferencia-fixa', nome: 'Transferência Fixa', ix: 142.85, iy: 58.04, is: 200, lx: 168.58, ly: 257.5, lw: 148.5,
-      modalidade: 'Transferência de propriedade ou de domicílio intermunicipal ou interestadual',
-      // Textos dos dois botões que expandem (no Canva ainda são "Lorem ipsum": troque aqui pelo conteúdo real).
-      acordeao: {
-        antiga: [
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-        ],
-        nova: [
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-        ]
-      }, valor: '$$$$' },
-    { id: 'infracao-de-transito', nome: 'Infração de Trânsito', ix: 436.83, iy: 58.04, is: 200, lx: 453.3, ly: 257.5, lw: 167.1, valor: '$$$$' },
-    { id: 'revenda', nome: 'Revenda', ix: 730.5, iy: 58.04, is: 200, lx: 793.97, ly: 257.5, lw: 73.1, valor: '$$$$' },
-    { id: 'mera', nome: 'Mera', ix: 1024.5, iy: 58.04, is: 200, lx: 1087.95, ly: 257.5, lw: 73.1, valor: '$$$$' },
+    { id: 'transferencia-fixa', nome: 'Transferência Fixa', ix: 170.89, iy: 67.38, is: 200, lx: 196.6, ly: 266.8, lw: 148.5 },
+    { id: 'infracao-de-transito', nome: 'Infração de Trânsito', ix: 459.27, iy: 67.38, is: 200, lx: 473.1, ly: 266.8, lw: 167.1 },
+    { id: 'revenda', nome: 'Revenda', ix: 713.32, iy: 67.38, is: 200, lx: 776.8, ly: 266.8, lw: 73.1 },
+    { id: 'mera', nome: 'Mera', ix: 980.98, iy: 67.38, is: 200, lx: 1044.4, ly: 266.8, lw: 73.1 },
 
-    { id: 'mera-sem-motor', nome: 'Mera sem Motor', ix: 142.85, iy: 342.34, is: 200, lx: 168.58, ly: 541.8, lw: 148.5, valor: '$$$$' },
-    { id: 'seguradora', nome: 'Seguradora', ix: 432.8, iy: 337, is: 208, lx: 453.3, ly: 541.8, lw: 167.1, valor: '$$$$' },
-    { id: 'financeira', nome: 'Financeira', ix: 730.5, iy: 342.34, is: 200, lx: 783.84, ly: 541.8, lw: 93.4, valor: '$$$$' },
-    { id: 'publico', nome: 'Público', ix: 1024.5, iy: 342.34, is: 200, lx: 1087.95, ly: 541.8, lw: 73.1, valor: '$$$$' },
+    { id: 'mera-sem-motor', nome: 'Mera sem Motor', ix: 170.89, iy: 351.68, is: 200, lx: 196.6, ly: 551.1, lw: 148.5 },
+    { id: 'seguradora', nome: 'Seguradora', ix: 455.27, iy: 345.3, is: 208, lx: 473.1, ly: 551.1, lw: 167.1 },
+    { id: 'financeira', nome: 'Financeira', ix: 713.32, iy: 351.68, is: 200, lx: 766.6, ly: 551.1, lw: 93.4 },
+    { id: 'publico', nome: 'Público', ix: 980.98, iy: 351.68, is: 200, lx: 1044.4, ly: 551.1, lw: 73.1 },
 
-    { id: 'pesado-10ton', nome: 'Pesado (10Ton +)', ix: 142.85, iy: 628.8, is: 200, lx: 168.58, ly: 828.3, lw: 148.5, valor: '$$$$' },
-    { id: 'infracao-pesada', nome: 'Infração Pesada', ix: 431.9, iy: 630.2, is: 200, lx: 447.6, ly: 830.3, lw: 168.6, valor: '$$$$' },
-    { id: 'pesado-45-99', nome: 'Pesado (4,5 a 9,9 Ton)', ix: 742.4, iy: 622.8, is: 200, lx: 783.65, ly: 828.3, lw: 117.5, valor: '$$$$' },
-    { id: 'autorizado-detran', nome: 'Autorizado Detran', ix: 1024.5, iy: 628.8, is: 200, lx: 1043.8, ly: 830.3, lw: 161.4, valor: '$$$$' },
+    { id: 'pesado-10ton', nome: 'Pesado (10Ton +)', ix: 170.89, iy: 638.16, is: 200, lx: 196.6, ly: 837.6, lw: 148.5 },
+    { id: 'infracao-pesada', nome: 'Infração Pesada', ix: 455.94, iy: 640.24, is: 200, lx: 471.6, ly: 839.7, lw: 168.6 },
+    { id: 'pesado-45-99', nome: 'Pesado (4,5 a 9,9 Ton)', ix: 718.73, iy: 632.3, is: 200, lx: 754.6, ly: 837.6, lw: 117.5 },
+    // No Canva, "Autorizado Detran" ainda não tem página (nem link): aparece na home sem abrir nada.
+    { id: 'autorizado-detran', nome: 'Autorizado Detran', ix: 980.98, iy: 638.16, is: 200, lx: 1000.3, ly: 839.6, lw: 161.4, semPagina: true },
 
-    { id: 'treinamento', nome: 'Treinamento', ix: 293.2, iy: 913.9, is: 200, lx: 309.6, ly: 1112.2, lw: 167.1, valor: '$$$$' },
-    { id: 'preparacao-leilao', nome: 'Preparação Leilão', ix: 585.3, iy: 913.9, is: 200, lx: 626.6, ly: 1112.2, lw: 117.5, plain: true, valor: '$$$$' },
-    { id: 'cidade-sem-ecv', nome: 'Cidade sem ECV', ix: 892.3, iy: 902.6, is: 200, lx: 933.6, ly: 1116.8, lw: 117.5, plain: true,
-      modalidade: 'Procedimento descontinuado', semVideo: true, popup: true }
+    { id: 'treinamento', nome: 'Treinamento', ix: 292.81, iy: 924.12, is: 200, lx: 306.7, ly: 1123.6, lw: 167.1 },
+    { id: 'preparacao-leilao', nome: 'Preparação Leilão', ix: 594.27, iy: 924.12, is: 200, lx: 635.5, ly: 1123.6, lw: 117.5, plain: true },
+    { id: 'cidade-sem-ecv', nome: 'Cidade sem ECV', ix: 904.3, iy: 917.7, is: 200, lx: 945.5, ly: 1128.9, lw: 117.5, plain: true, popup: true }
   ];
 
   const app = document.getElementById('app');
@@ -459,7 +439,7 @@
     return `
     <footer class="sec foot-sec foot">
       <div class="stage" style="--h:${h}">
-        <img class="a pill" ${P(566, 36, 234)} src="assets/pill-compuletra.png" alt="Compuletra">
+        <img class="a selo" ${P(566, 36, 234)} src="assets/pill-compuletra.png" alt="Compuletra">
         <h2 class="a" ${P(381.95, 109.55, 602.1)}>Uma solução<span>Compuletra</span></h2>
         <img class="a flogo" ${P(568.36, 296.34, 229.29)} src="assets/logo-white.png" alt="VistoriaPro">
 
@@ -486,11 +466,14 @@
       'pesado-10ton': 'Pesado<br>(10Ton +)', 'pesado-45-99': 'Pesado (4,5 a<br>9,9 Ton)',
       'preparacao-leilao': 'Preparação<br>Leilão', 'cidade-sem-ecv': 'Cidade<br>Sem ECV' };
     // Ícone + rótulo formam um único link, para o hover animar os dois juntos
-    const itemsClean = MODALIDADES.map((m, i) => `
-      <a class="a item" style="${pos(m.ix, m.iy, m.is)};--i:${i}" href="#/${m.id}" aria-label="${esc(m.nome)}">
+    const itemsClean = MODALIDADES.map((m, i) => {
+      const abre = m.semPagina ? `<div class="a item static" role="img" aria-label="${esc(m.nome)}"` : `<a class="a item" href="#/${m.id}" aria-label="${esc(m.nome)}"`;
+      return `
+      ${abre} style="${pos(m.ix, m.iy, m.is)};--i:${i}">
         <img src="assets/icons/home/${m.id}.png" alt="" width="${m.is}" height="${m.is}">
-        <span class="a lbl t ${m.plain ? 'plain' : ''}" style="${pos(m.lx + m.lw / 2 - 100 - m.ix, m.ly - m.iy, 200)};--fs:20.49">${BR[m.id] || esc(m.nome)}</span>
-      </a>`).join('');
+        <span class="a lbl t ${m.plain || m.semPagina ? 'plain' : ''}" style="${pos(m.lx + m.lw / 2 - 100 - m.ix, m.ly - m.iy, 200)};--fs:20.49">${BR[m.id] || esc(m.nome)}</span>
+      </${m.semPagina ? 'div' : 'a'}>`;
+    }).join('');
 
     app.innerHTML = `
       <section class="sec hero">
@@ -514,16 +497,42 @@
   }
 
   /* ---------- Detalhe ---------- */
+  // Converte o texto do conteudo.js: **negrito**, linha em branco = parágrafo, quebra simples = <br>.
+  const md = t => esc(t).split(/\n\s*\n/).map(p => '<p>' + p.trim().replace(/\n/g, '<br>').replace(/\*\*([\s\S]+?)\*\*/g, '<b>$1</b>') + '</p>').join('');
+  const SETA = `<svg class="arrow" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="49" fill="none" stroke="#fffcf7" stroke-width="1.8"/><path d="M50 22.5V77.5M29 55.5L50 77.5L71 55.5" fill="none" stroke="#fffcf7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
   function detail(m) {
-    const bullets = m.mudou && m.mudou.length
-      ? `<ul>${m.mudou.map(i => `<li>${esc(i)}</li>`).join('')}</ul>` : '';
-    const mod = m.modalidade ? ` ${esc(m.modalidade)}` : '';
-    const valor = m.semVideo ? '' : `<p class="tight"><b>Valor:</b> ${esc(m.valor || '$$$$')}</p>`;
-    // Páginas com acordeão (Transferência Fixa) não têm "O que mudou:"; as demais seguem o modelo anterior.
-    const oQueMudou = m.acordeao ? '' : `<p class="tight"><b>O que mudou:</b></p>${bullets || '<p></p>'}`;
-    const video = m.semVideo ? '' : `
+    const c = (window.CONTEUDO || {})[m.id] || {};
+    const tab = `
+      <div class="a tab navy" style="${pos(345, 0, 698.3)};height:calc(172.7 * var(--u))">
+        <a class="a logo-link" style="${pos(129.5, 47.7, 418)}" href="#/" aria-label="VistoriaPro - início"><img src="assets/logo-white.png" alt="VistoriaPro"></a>
+      </div>`;
+    const painel = (cls, titulo, texto, al) => `
+      <section class="panel ${cls}" aria-label="${titulo}">
+        <div class="pill"><h2>${titulo}</h2>${SETA}</div>
+        <div class="pic"><img src="assets/icons/detail/${m.id}.png" alt=""><div class="nm">${esc(m.nome)}</div></div>
+        <div class="ptxt ${al === 's' ? 's' : 'j'}">${md(texto)}</div>
+      </section>`;
+
+    // Parte de cima: com painéis (antiga / nova) ou, se o Canva só tem um texto (ex.: Treinamento), ícone + texto.
+    const topo = c.antiga
+      ? `<div class="flow">
+           <div class="hdr">${tab}</div>
+           <div class="panels">
+             ${painel('antiga', 'Modalidade Antiga', c.antiga, (c.alinhar || [])[0])}
+             ${painel('nova', 'Nova modalidade', c.nova, (c.alinhar || [])[1])}
+           </div>
+         </div>`
+      : `<div class="stage" style="--h:1209">
+           ${tab}
+           <img class="a d-icon" style="${pos(154.5, 321.35, 250)}" src="assets/icons/detail/${m.id}.png" alt="">
+           <div class="a t detail-name" style="${pos(128.6, 573.6, 301.1)};--fs:36.3">${esc(m.nome)}</div>
+           <div class="a ptxt j" style="${pos(529.6, 292.8, 725.8)}">${md(c.texto || '')}</div>
+         </div>`;
+
+    const video = `
       <p class="a t watch" style="${pos(283, 254.9, 800)};--fs:31.47">Assista nossos contéudos no Youtube</p>
-      <div class="a video" style="${pos(147.7, 312.3, 1092.8)};height:calc(614.2 * var(--u))">
+      <div class="a video" style="${pos(124.5, 310.8, 1115)};height:calc(626.7 * var(--u))">
         <button type="button" class="yt-facade" data-video="${VIDEO_ID}" aria-label="Reproduzir vídeo: ${esc(m.nome)}">
           <img src="https://i.ytimg.com/vi/${VIDEO_ID}/maxresdefault.jpg" alt="" loading="lazy"
                onerror="if(!this.dataset.f){this.dataset.f=1;this.src='https://i.ytimg.com/vi/${VIDEO_ID}/hqdefault.jpg'}">
@@ -531,73 +540,24 @@
           ${/^https?:$/.test(location.protocol) ? '' : '<span class="yt-note">Para assistir aqui na página, abra o site pelo arquivo <b>abrir-site.bat</b>. Clique para ver no YouTube.</span>'}
         </button>
       </div>`;
-    const backY = m.semVideo ? 254.9 + 100 : 993;
+
     app.innerHTML = `
       <section class="sec detail-sec">
-        <!-- Parte de cima: cabeçalho, ícone, dados e (na Transferência Fixa) o acordeão -->
-        <div class="stage accstage" style="--h:1232">
-          <div class="a tab navy" style="${pos(345, 0, 698.3)};height:calc(172.7 * var(--u))">
-            <a class="a logo-link" style="${pos(129.5, 47.7, 418)}" href="#/" aria-label="VistoriaPro - início"><img src="assets/logo-white.png" alt="VistoriaPro"></a>
-          </div>
-
-          <img class="a d-icon" style="${pos(154.5, 321.35, 250)}" src="assets/icons/detail/${m.id}.png" alt="">
-          <div class="a t detail-name" style="${pos(147.7, 572.9, 262.8)};--fs:36.25">${esc(m.nome)}</div>
-
-          <div class="a info" style="${pos(526, 282.2, 732.8)}">
-            <p><b>Tipo:</b> Segurança Veicular</p>
-            <p><b>Modalidade:</b>${mod}</p>
-            ${oQueMudou}
-            ${valor}
-          </div>
-          ${m.acordeao ? accordion(m) : ''}
-        </div>
-
+        ${topo}
         <!-- Parte de baixo: "Como se realiza...", vídeo e botão voltar -->
-        <div class="stage" style="--h:${m.semVideo ? 520 : 1176}">
-          <div class="a cta" style="${pos(137.1, 0, 1092.8)};height:calc(202 * var(--u))">
-            <div class="a t c1" style="${pos(0, 38.3, 1092.8)};--fs:48.68;position:absolute">Como se realiza a nova vistoria na</div>
-            <div class="a t c2" style="${pos(0, 82.9, 1092.8)};--fs:69.73;position:absolute">modalidade de segurança?</div>
+        <div class="stage" style="--h:1176">
+          <div class="a cta" style="${pos(128.5, 0, 1113)};height:calc(202 * var(--u))">
+            <div class="a t c1" style="${pos(0, 38.3, 1113)};--fs:48.68;position:absolute">Como se realiza a nova vistoria na</div>
+            <div class="a t c2" style="${pos(0, 82.9, 1113)};--fs:69.73;position:absolute">modalidade de segurança?</div>
           </div>
           ${video}
-          <a class="a back" style="${pos(498.6, backY, 368.8)}" href="#/">Voltar ao Início</a>
+          <a class="a back" style="${pos(498.6, 993, 368.8)}" href="#/">Voltar ao Início</a>
         </div>
       </section>
       ${footer(69, 639)}`;
     document.title = `${m.nome} | VistoriaPro`;
   }
 
-  /* ---------- Acordeão "antiga / nova modalidade" ---------- */
-  const ACC_ALTURA = { none: 1232, nova: 1232, antiga: 1391 }; // altura (design px) da parte de cima em cada estado
-  function accordion(m) {
-    const li = a => a.map(t => `<li>${esc(t)}</li>`).join('');
-    const seta = `<svg class="acc-arrow" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="49" fill="none" stroke="#fffcf7" stroke-width="1.8"/><path d="M50 22.5V77.5M29 55.5L50 77.5L71 55.5" fill="none" stroke="#fffcf7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    const item = (key, titulo, itens, ho, pw, bl, bt, bg) => `
-      <div class="acc-item ${key}" data-acc="${key}" style="--ho:${ho};--pw:${pw};--bl:${bl};--bt:${bt};--pbg:${bg}">
-        <button type="button" class="acc-head" id="acc-btn-${key}" aria-expanded="false" aria-controls="acc-${key}">
-          <span class="acc-title">${titulo}</span>${seta}
-        </button>
-        <div class="acc-panel"><div class="acc-body" id="acc-${key}" role="region" aria-labelledby="acc-btn-${key}"><ul>${li(itens)}</ul></div></div>
-      </div>`;
-    return `
-      <div class="a acc" style="${pos(533.8, 615.3, 788.5)}">
-        ${item('antiga', 'Como era feita na antiga modalidade', m.acordeao.antiga, 455.3, 788.5, 21.7, 136.5, '#ffd3d3')}
-        ${item('nova', 'Como deve ser feita na nova modalidade', m.acordeao.nova, 402.2, 780.8, 10.7, 119.4, '#d5ffdb')}
-      </div>`;
-  }
-  // Só um painel aberto por vez; a página cresce/encolhe suavemente conforme o estado do Canva (fechado / nova / antiga).
-  app.addEventListener('click', e => {
-    const head = e.target.closest('.acc-head');
-    if (!head) return;
-    const item = head.closest('.acc-item'), acc = item.parentElement;
-    const estavaAberto = item.classList.contains('open');
-    acc.querySelectorAll('.acc-item').forEach(it => {
-      it.classList.remove('open');
-      it.querySelector('.acc-head').setAttribute('aria-expanded', 'false');
-    });
-    let estado = 'none';
-    if (!estavaAberto) { item.classList.add('open'); head.setAttribute('aria-expanded', 'true'); estado = item.dataset.acc; }
-    acc.closest('.stage').style.setProperty('--h', ACC_ALTURA[estado]);
-  });
 
   /* ---------- Vídeo ---------- */
   // Ordem de tentativa ao clicar na capa:
@@ -734,7 +694,7 @@
   function route() {
     closePopup(false, true);
     const id = location.hash.replace(/^#\/?/, '');
-    const m = MODALIDADES.find(x => x.id === id);
+    const m = MODALIDADES.find(x => x.id === id && !x.semPagina);
     if (m && m.popup) {            // abre o aviso sobre a home, sem trocar de página
       if (!document.querySelector('.hero')) { home(); window.scrollTo(0, 0); }
       showPopup();
